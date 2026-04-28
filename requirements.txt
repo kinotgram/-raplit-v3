@@ -1,0 +1,6 @@
+python-telegram-bot
+openai
+moviepy
+whisper
+ffmpeg-python
+yt-dlp
