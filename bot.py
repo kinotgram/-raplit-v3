@@ -14,11 +14,16 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if is_youtube(text):
         await update.message.reply_text("Video wird verarbeitet (V3)...")
 
-        result = engine.process_video(text)
+        try:
+    result = engine.process_video(text)
 
-        await update.message.reply_text(
-            f"Fertig!\n\nCaption:\n{result['caption']}\n\nHashtags:\n{result['hashtags']}"
-        )
+    await update.message.reply_text(
+        f"Fertig!\n\nCaption:\n{result['caption']}\n\nHashtags:\n{result['hashtags']}"
+    )
+
+except Exception as e:
+    await update.message.reply_text(f"Fehler in Engine: {str(e)}")
+    print("ENGINE ERROR:", e)
     else:
         await update.message.reply_text("Bitte YouTube Link senden")
 
