@@ -1,0 +1,1 @@
+print("RapLit Bot läuft")
