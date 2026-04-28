@@ -1,47 +1,56 @@
-import re
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
 import engine
 
-# ⚠️ HIER DEIN NEUER TOKEN EINTRAGEN
 TOKEN = "8763087192:AAFKXwlURObfuJlqhyz0sM7Uo66CZKjKD8c"
 
-def is_youtube(url):
+def is_youtube(url: str):
     return "youtube.com" in url or "youtu.be" in url
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
-    print("DEBUG: MESSAGE RECEIVED:", text)
+    print("📩 MESSAGE RECEIVED:", text)
+
+    if not text:
+        return
 
     if is_youtube(text):
-        await update.message.reply_text("Video wird verarbeitet...")
+        await update.message.reply_text("🎬 Video wird verarbeitet...")
 
-        print("DEBUG: CALLING ENGINE")
+        try:
+            print("⚙️ ENGINE START")
 
-        result = engine.process_video(text)
+            result = engine.process_video(text)
 
-        print("DEBUG: ENGINE RETURNED:", result)
+            print("✅ ENGINE DONE")
 
-        await update.message.reply_text(
-            f"Fertig!\n\nCaption:\n{result['caption']}\n\nHashtags:\n{result['hashtags']}"
-        )
-
-    else:
-        await update.message.reply_text("Bitte YouTube Link senden")
+            await update.message.reply_text(
+                "✅ Fertig!\n\n"
+                f"📝 Caption:\n{result['caption']}\n\n"
+                f"🏷 Hashtags:\n{result['hashtags']}"
+            )
 
         except Exception as e:
-            await update.message.reply_text(f"❌ Fehler in Engine:\n{str(e)}")
-            print("ENGINE ERROR:", e)
+            print("❌ ENGINE ERROR:", e)
+            await update.message.reply_text(f"❌ Fehler:\n{str(e)}")
 
     else:
         await update.message.reply_text("❗ Bitte sende einen YouTube Link")
 
 def main():
-    app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    print("🚀 BOT STARTING...")
 
-    print("🤖 Bot läuft V3...")
+    app = ApplicationBuilder().token(TOKEN).build()
+
+    print("🚀 BOT BUILT")
+
+    app.add_handler(
+        MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message)
+    )
+
+    print("🚀 HANDLER READY")
+
     app.run_polling()
 
 if __name__ == "__main__":
