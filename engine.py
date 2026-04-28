@@ -8,7 +8,8 @@ def download_video(url):
 
     ydl_opts = {
         "outtmpl": f"{TEMP_DIR}/video.mp4",
-        "format": "bestvideo+bestaudio"
+        "format": "bestvideo+bestaudio/best",
+        "merge_output_format": "mp4"
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -18,15 +19,15 @@ def download_video(url):
 
 
 def split_chunks(video_path):
-    # V3 SIMPLE VERSION: fake chunk system (30min placeholder)
+    # V3 simplified: 30min logic kommt später mit ffmpeg
     return [video_path]
 
 
 def generate_caption():
-    return "🔥 Best Gaming Moment Ever!"
+    return "🔥 Epic Moment from Gameplay"
 
 def generate_hashtags():
-    return "#gaming #viral #fyp #clips"
+    return "#gaming #viral #shorts #fyp #clips"
 
 
 def process_video(url):
@@ -34,11 +35,8 @@ def process_video(url):
 
     chunks = split_chunks(video)
 
-    # später: echte cutting engine
-    first_chunk = chunks[0]
-
     return {
-        "file": first_chunk,
+        "file": chunks[0],
         "caption": generate_caption(),
         "hashtags": generate_hashtags()
     }
