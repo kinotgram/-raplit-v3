@@ -12,17 +12,23 @@ def is_youtube(url):
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
+    print("DEBUG: MESSAGE RECEIVED:", text)
+
     if is_youtube(text):
-        await update.message.reply_text("🎬 Video wird verarbeitet (V3)...")
+        await update.message.reply_text("Video wird verarbeitet...")
 
-        try:
-            result = engine.process_video(text)
+        print("DEBUG: CALLING ENGINE")
 
-            await update.message.reply_text(
-                f"✅ Fertig!\n\n"
-                f"📝 Caption:\n{result['caption']}\n\n"
-                f"🏷 Hashtags:\n{result['hashtags']}"
-            )
+        result = engine.process_video(text)
+
+        print("DEBUG: ENGINE RETURNED:", result)
+
+        await update.message.reply_text(
+            f"Fertig!\n\nCaption:\n{result['caption']}\n\nHashtags:\n{result['hashtags']}"
+        )
+
+    else:
+        await update.message.reply_text("Bitte YouTube Link senden")
 
         except Exception as e:
             await update.message.reply_text(f"❌ Fehler in Engine:\n{str(e)}")
