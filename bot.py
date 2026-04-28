@@ -3,7 +3,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
 
 # TOKEN hier einfügen
-TOKEN = "DEIN_TELEGRAM_BOT_TOKEN"
+TOKEN = 8763087192:AAFKXwlURObfuJlqhyz0sM7Uo66CZKjKD8c
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
